@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radio Web · Bienvenida</title>
+
+  <style>
+    :root{
+      --bg: #0f172a;
+      --panel: rgba(17, 28, 51, 0.72);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --line: rgba(255,255,255,.08);
+      --accent: #22c55e;
+      --shadow: 0 18px 50px rgba(0,0,0,.25);
+      --radius: 16px;
+    }
+
+    *{ box-sizing: border-box; }
+
+    body{
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1000px 600px at 15% 10%, rgba(34,197,94,.12), transparent 60%),
+        radial-gradient(900px 500px at 85% 20%, rgba(59,130,246,.10), transparent 60%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+    }
+
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 20px;
+    }
+
+    .topbar{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo{
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      font-size: 18px;
+    }
+
+    nav{
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    nav a{
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 10px;
+      border-radius: 10px;
+      transition: background .2s ease, color .2s ease;
+    }
+
+    nav a:hover{
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+    }
+
+    main{
+      padding: 46px 0 120px; /* espacio para el reproductor fijo */
+    }
+
+    .hero{
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .card{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      backdrop-filter: blur(8px);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    h1{
+      margin: 0 0 10px;
+      font-size: 2rem;
+      letter-spacing: .2px;
+    }
+
+    .subtitle{
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 60ch;
+    }
+
+    .meta{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .pill{
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: .92rem;
+      background: rgba(255,255,255,.03);
+    }
+
+    .status{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(34,197,94,.12);
+      flex: 0 0 auto;
+    }
+
+    .panel-title{
+      margin: 0 0 12px;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+
+    .list{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    footer{
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      padding: 18px 0;
+      margin-top: 24px;
+      font-size: .92rem;
+    }
+
+    /* Reproductor fijo (estilo app) */
+    .player{
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 20;
+      border-top: 1px solid var(--line);
+      background: rgba(10, 16, 34, 0.82);
+      backdrop-filter: blur(10px);
+    }
+
+    .player .wrap{
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 20px;
+    }
+
+    .now{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .badge{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.04);
+      flex: 0 0 auto;
+      font-size: 18px;
+    }
+
+    .now strong{
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: .98rem;
+    }
+
+    .now span{
+      display: block;
+      color: var(--muted);
+      font-size: .9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .controls{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .btn{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      height: 42px;
+      min-width: 42px;
+      padding: 0 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform .08s ease, background .2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover{ background: rgba(255,255,255,.07); }
+    .btn:active{ transform: scale(0.98); }
+
+    .btn-primary{
+      border-color: rgba(34,197,94,.35);
+      background: rgba(34,197,94,.10);
+    }
+
+    .btn-primary:hover{
+      background: rgba(34,197,94,.16);
+    }
+
+    .right{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: end;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .volume{
+      width: 140px;
+      accent-color: var(--accent);
+    }
+
+    .small{
+      display: none;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    @media (max-width: 860px){
+      .hero{ grid-template-columns: 1fr; }
+      .player .wrap{ grid-template-columns: 1fr auto; }
+      .right{ display: none; }
+      .small{ display: block; margin-top: 6px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap">
+      <div class="topbar">
+        <a class="brand" href="#">
+          <div class="logo" aria-hidden="true">🎙️</div>
+          <div>
+            <div style="font-weight:800; letter-spacing:.3px;">Radio Web</div>
+            <div style="color:var(--muted); font-size:.9rem;">Tu emisora, en cualquier lugar</div>
+          </div>
+        </a>
+
+        <nav aria-label="Navegación principal">
+          <a href="#">Inicio</a>
+          <a href="#">Programación</a>
+          <a href="#">Podcasts</a>
+          <a href="#">Contacto</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section class="hero">
+        <article class="card">
+          <h1>Bienvenido/a</h1>
+          <p class="subtitle">
+            Esta aplicación será el punto de entrada a nuestra radio online.
+            Muy pronto podrás escuchar en directo, consultar la programación y descubrir contenidos a la carta.
+          </p>
+
+          <div class="meta" aria-label="Características previstas">
+            <span class="pill">📡 Directo</span>
+            <span class="pill">🗓️ Parrilla</span>
+            <span class="pill">🎧 Podcasts</span>
+            <span class="pill">⭐ Favoritos</span>
+          </div>
+
+          <div class="status" role="status" aria-live="polite">
+            <span class="dot" aria-hidden="true"></span>
+            <span>Estado: versión inicial. Reproductor listo para conectar el stream.</span>
+          </div>
+
+          <p class="small">Tip: cuando tengas la URL del stream, solo hay que pegarla en el <code>&lt;audio&gt;</code>.</p>
+        </article>
+
+        <aside class="card">
+          <h2 class="panel-title">Próximos pasoss</h2>
+          <ul class="list">
+            <li>Conectar streaming (URL) y mostrar estado “En directo”.</li>
+            <li>Programación con franjas horarias y programa actual.</li>
+            <li>Podcasts: listado, episodios y reproductor por episodio.</li>
+            <li>Login opcional para favoritos.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <footer>
+        © <span id="y"></span> Radio Web · Versión inicial
+      </footer>
+    </div>
+  </main>
+
+  <!-- Reproductor (fijo abajo) -->
+  <div class="player" role="region" aria-label="Reproductor de radio">
+    <div class="wrap">
+      <div class="now">
+        <div class="badge" aria-hidden="true">📻</div>
+        <div style="min-width:0;">
+          <strong id="trackTitle">Radio Web — Directo</strong>
+          <span id="trackSub">Listo para emitir · Próximamente</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn" id="btnStop" type="button" title="Detener">⏹</button>
+        <button class="btn btn-primary" id="btnPlay" type="button" title="Reproducir / Pausar">
+          ▶︎ <span style="font-weight:800;">Play</span>
+        </button>
+      </div>
+
+      <div class="right">
+        <span id="state">Sin señal</span>
+        <input class="volume" id="vol" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="Volumen" />
+      </div>
+
+      <!-- Audio listo para conectar -->
+      <audio id="radio" preload="none">
+        <!-- Pega aquí tu URL cuando la tengas -->
+        <!-- <source src="https://TU_STREAM_URL_AQUI" type="audio/mpeg" /> -->
+      </audio>
+    </div>
+  </div>
+
+  <script>
+    // año automático
+    document.getElementById("y").textContent = new Date().getFullYear();
+
+    const audio = document.getElementById("radio");
+    const btnPlay = document.getElementById("btnPlay");
+    const btnStop = document.getElementById("btnStop");
+    const vol = document.getElementById("vol");
+    const state = document.getElementById("state");
+    const trackSub = document.getElementById("trackSub");
+
+    // volumen inicial
+    audio.volume = parseFloat(vol.value);
+
+    vol.addEventListener("input", () => {
+      audio.volume = parseFloat(vol.value);
+    });
+
+    function hasSource() {
+      return audio.querySelector("source") && audio.querySelector("source").getAttribute("src");
+    }
+
+    btnPlay.addEventListener("click", async () => {
+      if (!hasSource()) {
+        state.textContent = "Sin señal";
+        trackSub.textContent = "Añade la URL del stream en <audio> para emitir";
+        return;
+      }
+
+      try {
+        if (audio.paused) {
+          await audio.play();
+          btnPlay.innerHTML = "⏸ <span style='font-weight:800;'>Pausa</span>";
+          state.textContent = "En directo";
+          trackSub.textContent = "Reproduciendo…";
+        } else {
+          audio.pause();
+          btnPlay.innerHTML = "▶︎ <span style='font-weight:800;'>Play</span>";
+          state.textContent = "Pausado";
+          trackSub.textContent = "En pausa";
+        }
+      } catch (e) {
+        state.textContent = "Error";
+        trackSub.textContent = "No se pudo iniciar la reproducción";
+      }
+    });
+
+    btnStop.addEventListener("click", () => {
+      audio.pause();
+      audio.currentTime = 0;
+      btnPlay.innerHTML = "▶︎ <span style='font-weight:800;'>Play</span>";
+      state.textContent = "Detenido";
+      trackSub.textContent = "Listo";
+    });
+  </script>
+</body>
+</html>
