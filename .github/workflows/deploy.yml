@@ -3,7 +3,7 @@ name: CI/CD Docker + Render
 on:
   push:
     branches:
-      - master  # Puedes cambiarlo si usas otra rama principal
+      - master  
 
 jobs:
   deploy:
@@ -36,3 +36,9 @@ jobs:
 
       - name: 🚀 Redeploy en Render
         run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+        
+      - name: ⚠️ Alerta post-deploy (simulada)
+        if: failure()
+        run: |
+          echo "ALERTA: El despliegue ha fallado."
+          echo "Se notificaría al equipo por email o Slack."
